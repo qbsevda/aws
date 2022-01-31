@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  EC2 Instance with SSH and HTTP enabled for Carousel website.
+Resources:
+  cf-ec2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0a8b4cd432b1c3063
+      InstanceType: t2.micro
+      KeyName: sysy
+      SecurityGroups:
+        kitten-sec-group:
+          Type: AWS::EC2::SecurityGroup
+          Properties:
+            GroupDescription: "http & ssh enabled" # Required
+            GroupName: kitten-sec-group
+            SecurityGroupIngress:
+              - IpProtocol: tcp
+                FromPort: 22
+              - IpProtocol: tcp
+                FromPort: 80
+
+      UserData:
+        Fn::Base64:
+          !Sub |
+            #! /bin/bash
+            yum update -y
+            yum install httpd -y
+            systemctl start httpd
+            systemctl enable httpd
+            cd /var/www/html
+            
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat0.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat1.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat2.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat3.jpg
+            wget https://github.com/qbsevda/my-projects/blob/240d389607c4d17a64c2009ea9994362eb49d5ca/kittens/index.html
