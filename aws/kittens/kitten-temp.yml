@@ -30,8 +30,8 @@ Resources:
             systemctl enable httpd
             cd /var/www/html
             
-            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat0.jpg
-            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat1.jpg
-            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat2.jpg
-            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/kittens/cat3.jpg
-            wget https://github.com/qbsevda/my-projects/blob/240d389607c4d17a64c2009ea9994362eb49d5ca/kittens/index.html
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/aws/kittens/cat0.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/aws/kittens/cat1.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/aws/kittens/cat2.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/aws/kittens/cat3.jpg
+            wget https://raw.githubusercontent.com/qbsevda/my-projects/main/aws/kittens/index.html
