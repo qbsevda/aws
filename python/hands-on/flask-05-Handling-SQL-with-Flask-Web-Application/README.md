@@ -1,12 +1,12 @@
 # Hands-on Flask-05 : Handling SQL with Flask Web Application
 
-Purpose of the this hands-on training is to give the students introductory knowledge of how to handle forms, how to connect to database and how to use sql within Flask web application on Amazon Linux 2 EC2 instance. 
+Purpose of the this hands-on training is to see introductory knowledge of how to handle forms, how to connect to database and how to use sql within Flask web application on Amazon Linux 2 EC2 instance. 
 
 ![Databases in Flask](./database.png)
 
 ## Learning Outcomes
 
-At the end of the this hands-on training, students will be able to;
+At the end of the this hands-on training, we will be able to;
 
 - install Python and Flask framework on Amazon Linux 2 EC2 instance.
 
