@@ -1,12 +1,12 @@
 # Hands-on Flask-03-04: If-For structure, Handling Routes and Get-Post Methods
 
-Purpose of the this hands-on training is to give the students introductory knowledge of how to handle forms.
+Purpose of the this hands-on training is to show introductory knowledge of how to handle forms.
 
 ![HTTP Methods in Flask](./http-methods-flask.png)
 
 ## Learning Outcomes
 
-At the end of the this hands-on training, students will be able to;
+At the end of the this hands-on training, we will be able to;
 
 - build a simple web application with Flask framework.
 
