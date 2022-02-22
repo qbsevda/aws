@@ -1,0 +1,73 @@
+body {
+  background-color: #6fc7c5;
+}
+
+#main {
+  width: 80%;
+  margin: auto;
+}
+
+#title {
+  font-size: 70px;
+  text-align: center;
+  font-family: "Lobster";
+}
+
+span {
+    color: red;
+}
+
+#image {
+    width: 450px;
+    border-radius: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#paragraph {
+    text-align: center;
+    font-size:x-large;
+    border: 3px solid gray;
+    border-radius: 30px;
+}
+
+h2 {
+    font-family: "Lobster";
+    text-align: center;
+    font-size: 40px;
+}
+
+table {
+    background-color: #F37566;
+    border-radius: 30px;
+}
+
+td {
+    border: 1px solid gray;
+    border-radius: 30px;
+}
+
+ol, ul {
+    font-size: x-large;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+#lastP {
+    text-align: center;
+    font-size: 30px;
+}
+
+/*
+#tribute-link {
+    color: red;
+}
+*/
+
+p#lastP a {
+    color: red;
+}

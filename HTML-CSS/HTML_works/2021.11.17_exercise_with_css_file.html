@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2021.11.17-Exercise</title>
+    <style>
+        table {
+            margin-left: auto;
+            margin-top: auto;   
+        }
+        .anchor {
+            color: red;
+        }
+        #bottom-link {
+            color: blue;
+        }
+
+</style>
+<!-- .class_name {} ile butun ayni class name verdigimiz elementlerin style ini ayni anda degistirebiliriz -->
+<!-- #id_name {} ile id name verdigimiz bir elementin style ini degistirebiliriz -->
+</head>
+<body>
+    <h1 align="center" id="my-top-heading">Welcome to my web page</h1>
+    <!-- id="" ile bir id atiyoru ki bookmark yaparkan bu id yi # ile kullanarak yapicaz-->
+    <a href="#bottom-link" class="anchor">Go to the bottom of the page</a>
+    <table border="3" width=100% align="center">
+        <!--table i align ile sayfada ortalayabiliriz yada saga sola yalayabiliriz-->
+        <!--width ile genisligini yuzdelik olarak girebiliriz-->
+        <!--table burada block element-->
+        <caption align="top">Weekly Schedule</caption>
+        <!-- yaziyi ortalama yada saga sola yaslamak icin style veya align="left" top, buttom center or right kullanabiliriz -->
+        <tr>
+            <th rowspan="2">Days</th>
+            <th colspan="2">Schedule</th>
+            <th rowspan="2" align="left">Topic</th>
+            <!-- yaziyi ortalama yada saga sola yaslamak icin style veya align="left" -->
+        </tr>
+        <tr>
+            <th>Begin</th>
+            <th>End</th>
+        </tr>
+        <tr>
+            <td>Tuesday</td>
+            <td>07:00 am</td>
+            <td>11:00 am</td>
+            <td rowspan="2">
+                Computer <br>Fundamentals
+                <ul>
+                    <li>Hardware</li>
+                    <li>OS</li>
+                    <li>Storage</li>
+
+                    <li>Data</li>
+                </ul>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td rowspan="3">Thursday</td>
+            <td>07:00 <br>am</td>
+            <td>07:50 <br>am</td>
+        </tr>
+        <tr>
+           
+            <td>08:00 <br>am</td>
+            <td>08:50 <br>am</td>
+            <td rowspan="2">HTML <br> CSS </td>
+        </tr>
+        <tr>
+            <td>09:00 <br>am</td>
+            <td>10:00 <br>am</td>
+            
+        </tr>
+
+
+    </table>
+
+    <P id="paragraph-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+        Suscipit quisquam, atque tempore eaque ut quibusdam natus debitis tenetur 
+        nulla molestias quae distinctio esse tempora hic. 
+        Quam, rem corporis! Maxime, impedit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+        Suscipit quisquam, atque tempore eaque ut quibusdam natus debitis tenetur 
+        nulla molestias quae distinctio esse tempora hic. 
+        Quam, rem corporis! Maxime, impedit!Lorem ipsum dolor sit amet, consectetur adipisicing elit. 
+        Suscipit quisquam, atque tempore eaque ut quibusdam natus debitis tenetur 
+        nulla molestias quae distinctio esse tempora hic. 
+        Quam, rem corporis! Maxime, impedit!</P>
+
+    <strong>Hello World</strong>
+    <img src="img/design.jpeg" alt="Clarusway Student Picture" width="300"height="200" border="3">
+<!-- Bunlar (inline ayni satirda demek) lement oluyor cunku yanyana geliyor-->
+
+<hr>
+
+<a href="https://clarusway.com" target="_blank">Welcome to Clarusway</a>
+<br>
+<br>
+<a href="https://google.com" style="font-size: xx-large;" target="_blank">Welcome to Google</a>
+<br>
+<br>
+<a href="https://google.com" style="font-size: xx-large;" target="_blank"><img src="img/googlelogo.png" alt="google logo" width="50" height="50"></a>
+<br>
+<br>
+<a href="#my-top-heading" class="anchor">Go to the top of the page</a>
+<a href="#paragraph-1" id="bottom-link" class="anchor">Go to the paragraph</a> 
+<!-- a href="#id_name" ile site icinde id sini beliledigimiz bir yere link verebiliriz-->
+<!-- id ler uniqe dir. birden fazla ayni id olamaz ve id ler Case Sensetive dir. yani buyuk harf kucuk harf duyarlidir-->
+<!-- id="id_Name" ise href="id_Name" seklinde olmalidir. tam oalarak ayni olcak-->
+<!-- multiple HTML elements can share the same class-->
+<!-- class name de case sensetive dir-->
+<!-- id="id_Name" ise href="id_Name" seklinde olmalidir. tam oalarak ayni olcak-->
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning CSS</title>
+    
+    <link rel="stylesheet" type="text/css" href="2021.11.24_learning_CSS.css">
+    <!-- <style>
+        span{
+           color: blueviolet;  
+        }
+        #fristSpan{
+            color: coral;
+        }
+        .spanTogether{
+            color: rgb(20, 220, 57);
+        }
+        p {
+
+            color: yellow;
+        }
+
+    
+    </style>-->
+    <!-- bu butun span lerin style ini degistirir, eger farkli style lar yapmak istersek ID ye kullanabiliriz-->
+   
+    
+    </head>
+
+<body>
+    <!-- <h1 style="border-style: dashed;
+            border-color: aqua;"
+            >This is my heading
+    </h1> -->
+    <h1>This is my heading external style</h1>
+    <p style="color: blue;">Paragraph Hello World</p>
+    <p>Paragraph Hello World-2</p>
+    <p>Paragraph Hello World-3 for external style</p>
+
+    <!-- paragraf butun line i kapatiyor ama span butun line i kapsamaz arka arkaya devam eder-->
+    <span id="fristSpan" style="color: aqua;">span Hello World</span>
+    <br>
+    <span class="spanTogether">span Hello World-2</span>
+    <br>
+    <span class="spanTogether">span Hello World-3</span>
+    <br>
+    <span>span Hello World-4</span>
+    <!-- oncelik sirasi inline than internal than external yani css file dan alir -->
+    <br>
+    <span>oncelik sirasi inline than internal than external yani css file dan alir</span>
+
+</body>
+</html>

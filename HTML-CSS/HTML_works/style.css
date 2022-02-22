@@ -1,0 +1,21 @@
+p{
+    font-size: 70px;
+}
+
+p{
+    font-size: 20px;
+}
+
+
+#p3 {
+    border: 10px red solid;
+    padding: 50px;
+    margin: 40px;
+}
+
+* {
+    color:purple;
+
+}
+
+

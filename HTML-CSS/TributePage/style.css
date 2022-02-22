@@ -1,0 +1,37 @@
+
+body {
+    background-color: rgba(62, 139, 88, 0.842);
+    }
+
+#title {
+    text-align: center;
+    font-size: 70px;
+    font-family: "Lobster";
+}
+
+#span_title {
+    color: red;
+
+}
+
+#imageSteve {
+    width: 450px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+
+}
+
+#paragraph1 {
+    width: 700px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    border: 1px solid rgb(81, 9, 9);
+    border-radius: 10px;
+    padding: 5px;
+    font-size: x-large;
+
+}

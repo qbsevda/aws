@@ -1,0 +1,22 @@
+
+/* bu bize tup renkleri degistirmemizi saglar
+* {
+    color: orangered;
+
+} 
+*/
+p {
+    color: red;
+    background-color: aqua;
+    border: 1px solid blue;
+    
+}
+h1 {
+    color: blue;
+    background-color: yellow;
+    border: 1px solid black
+    
+}
+/* comment yapmanin kisa yolu Command+k+c yapmak
+    tekrar yaparsak da uncomment yapiyor yani comment i geri aliyor
+     */
