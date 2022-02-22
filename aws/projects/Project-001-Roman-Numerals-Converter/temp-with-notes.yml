@@ -1,0 +1,188 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This temp creates an ASG behind an ALB.
+   
+Parameters:  # stack olusturulurken kullanicinin girmesini istedigimiz bilgiler parametrelerdir.
+  myVPC:      #ParameterName:
+    Description: Select your VPC
+    Type: AWS::EC2::VPC::Id
+
+
+
+  mySubnets:  #ParameterName:
+    Description: Select at least 2 subnets
+    Type: List<AWS::EC2::Subnet::Id>
+
+
+
+    myKP:    # ParameterName:
+      Description: Select your Key 
+      Type: AWS::EC2::KeyPair::KeyName
+
+
+
+    myIT:    # ParameterName: myIT = my instance type
+    Description: Select instance type
+    Type: String
+    Default: t2.micro   # hicbirsey secilmez ise default olarak t2.micro gelecek.
+    AllowedValues:
+      - t2.micro
+      - t3.micro
+      - t2.nano
+      - t3.nano
+
+
+
+Mappings:
+  RegionImageMap:
+    us-east-1:
+      AMI: ami-0dc2d3e4c0f9ebd18
+    us-east-2:
+      AMI: ami-0233c2d874b811deb
+    us-west-1:
+      AMI: ami-0ed05376b59b90e46
+    us-west-2:
+      AMI: ami-0dc8f589abe99f538
+    eu-west-1:
+      AMI: ami-058b1b7fe545997ae
+  
+
+  
+Resources: 
+
+  myALB:       # LogicalID: my Application Load Balancer
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      SecurityGroups:
+        - !GetAtt mySG.GroupId
+      Subnets: !Ref mySubnets #ref fuction'i ile subnetleri parametre olarak kullaniciya sectiriyoruz.
+      Type: application
+
+
+
+  myListener:      #LogicalID:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: # Required
+        - Type: forward
+          TargetGroupARNs: !Ref myTG  # hangi target grup ile calismak istiyorsak onu belirtiyoruz.
+      LoadBalancerArn: !Ref myALB    # Required    # Ref myALB ile olusturdugumuz load blancer'i burdaki listener'a eklemis olduk.
+      Port: 80
+      Protocol: HTTP
+
+
+
+  myASG:     # LogicalID = myASG: Auto scaling group
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones: !GetAZs 
+      DesiredCapacity: "2"
+      HealthCheckGracePeriod: 90
+      HealthCheckType: ELB  # auto scailing'in (EC2'nun) yaptigi healthcheck default geliyor onu degistiremiyoruz, auto scalling'e ek olarak application load balancer'da ELB ile health check yapar.
+      LaunchTemplate:
+        LaunchTemplateId: !Ref myLT # Auto scailling 'in olusturacagi instance'lerin ozelliklerini myLT launch template'den almasini referans ediyor.
+        Version: "1"
+      MaxSize: "3" # Required
+      MinSize: "1" # Required
+      TargetGroupARNs:
+        - !Ref myTG  #auto scalling grubun olusturdugu instanceleri myTG target grubuna koymasini referans ediyor. cunku yeni instancelerin healthchecklerini target gruba koyarak yaptirmaliyiz. bu referansi kullanmazsak olusturulan instancelerin healthcheckleri yapilamaz.
+
+
+
+  myCPUPolicy:  #LogicalID:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref myASG # Required
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization  
+        TargetValue: 60.0
+
+
+
+  myLT:      #LogicalID:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: !FindInMap  # imageID: ami-033b95fb8079dc481 gibi olan degerler. imageId region ile alakali oldugundan hem farkli regionlarda ve hem de farkli vpc lerde calisabilsin.
+         - RegionImageMap    # hangi bolgede calisacaksa buna o degerler ordan gelsin.bunu mapping ile yaptiriyoruz, keylerin karsisina deger atamak gibi birsey.
+         - !Ref AWS::Region  # !Ref AWS::Region = hangi regionda da calisiyorsak onu alir.!FindInMap [ MapName, TopLevelKey, SecondLevelKey ] seklinde kullanilir. MapName = RegionImageMap, TopLevelKey = RegionImageMap parametresinin altindaki us-east-1: gibi region isimleridir.
+         - AMI               
+        InstanceType: !Ref myIT # !Ref myIT = parametre kismindaki myIT parametresinden instance type'i kullanicidan stack olusturulurken input olarak istiyoruz.  
+        KeyName: !Ref myKP
+        SecurityGroupIds: #!Ref fonksiyonunu kullanamayiz cunku bizden ID istiyor. 
+                          # Security group un ID isini almak icin !GetAtt fonksiyonunu kullaniyoruz
+                          # security group un gettatt ile cagrilan iki attribute'u var GroupId ve VpcId. https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html#aws-properties-ec2-security-group-return-values
+                          # hangi resource'dan bir bilgi cagiracaksak o resource un documentation'ina gidip Return Values kismindan, hangi fonksiyonun neleri getirdigine bakmaliyiz.
+          - !GetAtt mySG.GroupId  # !GetAtt = Attribute leri almak icin kullaniliyor. (attribute = atanmis degerler) her resourcenin farkli attributeleri var. #!GetAtt logicalNameOfResource.attributeName seklinde kullanilir.
+        
+        UserData: !Base64 | #arka arkaya yazdigimiz bloklari oldugu gibi tutuyor. Arka arkaya yazmasina engel olur, blok olarak tutar.
+          #! /bin/bash
+          yum update -y
+          yum install -y httpd
+          TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
+          && PRIVATE_IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/local-ipv4`
+          TOKEN=`curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600"` \
+          && PUBLIC_IP=`curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4` 
+          DATE_TIME=`date`
+          chmod -R 777 /var/www/html
+          echo "<html>
+          <head>
+              <title> Congratulations! You have created an instance from Launch Template</title>
+          </head>
+          <body>
+              <h1>This web server is launched from launch template by SEVDA</h1>
+              <p>This instance is created at <b>$DATE_TIME</b></p>
+              <p>Private IP address of this instance is <b>$PRIVATE_IP</b></p>
+              <p>Public IP address of this instance is <b>$PUBLIC_IP</b></p>
+          </body>
+          </html>" > /var/www/html/index.html
+          systemctl start httpd
+          systemctl enable httpd  
+
+
+
+
+
+
+  myTG:     #LogicalID:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 3
+      VpcId: !Ref myVPC     # !Ref myVPC ile parametre olarak vpc'yi kullanici seciyor.
+
+
+
+  mySG:      #LogicalID: template'de resource'lara verilen isim
+    Type: AWS::EC2::SecurityGroup # AWS'nin bir resourcenin tipini anladigi yer burasi.burasi cok onemli.bunun tipine gore asagida properties'ler cikacak ve o propertie'lere gore kendi resourcelerimizi olusturacagiz.
+    Properties:
+      GroupDescription:  Enables SHH and HTTP # Required     # bu security gruptan amacimiz shh ve http ye izin versin cunku load balancer kullanacagiz.
+      SecurityGroupIngress:
+        - IpProtocol: tcp   # burada security group Ingress-cidr'i sectik. liste yapmak icin 1. aytimin basina '-'koymamiz yeterli.
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0 # anywhere demek - butun dunyaya acik hale geldi.
+        - IpProtocol: tcp   # burada security group Ingress-cidr'i sectik. liste yapmak icin 1. aytimin basina '-'koymamiz yeterli.
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0  
+      VpcId: !Ref myVPC      # her olusturdugumuz security gruplar bir vpc ye baglidir. #!Ref myVPC ile parametre olarak vpc'yi kullanici seciyor.
+
+  
+Outputs:        #Cloud Formation stack ayaga kalktiginda bazi degerleri hazir gormek isteriz, ornegin EC2'nun public IP si gibi, load balancerin DNS i gibi. Output kismi bize ne gormek istiyorsak kendisi sagliyor.
+  AppUrl:    #LogicalID:
+    Description: URL of the ALB
+    Value: !Join 
+      -  ''    # burada delimeter tanimliyoruz.'' kullanarak degerleri birlestirmis oluyoruz. 'http://' ve !GetAtt myALB.DNSName bu ikisini join ile arada ayrac olmadan birlestiriyor.
+      - - 'http://'
+        - !GetAtt myALB.DNSName   #myALB'nin calistiginda olusacak DNS name ini bir attribute olarak !GetAtt myALB.DNSName fonksiyonu ile cagiriyoruz.
+
+   
+  
+

@@ -1,3 +1,0 @@
-
-crontab -e
-5 * * * * /home/ec2-user/backup.sh
