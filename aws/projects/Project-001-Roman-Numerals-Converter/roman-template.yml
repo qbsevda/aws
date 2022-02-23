@@ -1,9 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
-
 Description: |
-  The Roman Numerals Converter Application aims to convert the given number to the Roman numerals. The application is to be coded in Python and deployed as a web application with Flask on AWS Elastic Compute Cloud (EC2) Instance using AWS Cloudformation and CLI Services.
+  CloudFormation Template for Roman Numerals Converter Application. This template creates Python Flask Web Application on 
+  Amazon Linux 2 (ami-033b95fb8079dc481) EC2 Instance with custom security group allowing http connections on port 80 and SSH 
+  connection on port 22. Roman Numerals Converter Application is downloaded from Github repository, then installed on Flask.
+
   
-Parameters:
+Parameters: 
+  KeyName:
+    Description: enter the name of your Key Pair for SSH connections
+    Type: AWS::EC2::KeyPair::KeyName
+
+
   myVPC:
     Description: Select your VPC
     Type: AWS::EC2::VPC::Id
