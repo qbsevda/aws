@@ -90,6 +90,7 @@ Resources:
           PredefinedMetricType: ASGAverageCPUUtilization
         TargetValue: 60.0
 
+        
   myLT:
     Type: AWS::EC2::LaunchTemplate
     Properties:
