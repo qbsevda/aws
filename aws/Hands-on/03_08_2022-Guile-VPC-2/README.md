@@ -64,9 +64,7 @@ eval "$(ssh-agent)"
 ```bash
 ssh-add ./[your pem file name]
 ```
-- connect to the ec2-in-az1b-public-sn instance in public subnet. 
-
-- if we don't want to create a config file, we have another option, using -A flag with the ssh command. `-A` option `enables forwarding of the authentication agent connection`. It means that, it forwards your SSH auth schema to the remote host. So you can use SSH over there as if you were on your local machine.
+- 
 
 ```bash
 ssh -A ec2-user@ec2-3-88-199-43.compute-1.amazonaws.com
