@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  Cloudformation Template for kittens carousel static websire deploy on
+  s3 through cloudfront and route 53.
+Parameters:
+  DomainName:
+    Description: DNS Name of existing Amazon Route553 hosted zone. exp. sevdadevops.com
+    Type: AWS::Route53::HostedZone::Id
+  KittensDomainName:
+    Description: Full domain name for static website example. kittens.clarusway.us
+    Type: String
+    AllowedPattern: (?!-) [a-sA-Z0-9-.]{1,63}(?<!-)
+    ConstraintDescription: Please write a subdomain name which has utmost 63 characters
+
+
+Resources:
+  KittensCarousel:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref KittensDomainName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+       
+
+  s3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref KittensCarousel
+      PolicyDocument: JSON # Required
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            # Resource: !Join
+            #   - ''
+            #   - - 'arn:aws:s3:::www.sevdadevops.com'
+            #     - !Ref KittenCarousel
+            #     - /*
+            # Resource: !Sub "{KittenCarousel.Arn}/*
+            Resource: !GetAtt KittenCarousel.Arn
+
+
+  KittensCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      CertificateTransparencyLoggingPreference: ENABLED
+      DomainName: !Ref KittensDomainName
+      DomainValidationOptions:
+        DomainName: !Ref KittensDomainName
+        HostedZoneID: !Ref DomainName
+      ValidationMethod: DNS
+
+  KittensCloudfront:
+    Type: "AWS::CloudFront::Distribution" 
+    Properties:
+      DistributionConfig:
+        Aliases:
+        - !Ref KittensDomainName 
+        Comment: Cloudfront Distribution pointing to Kittens S3 bucket
+        DefaultCacheBehavior:
+          AllowedMethods:  
+          - GET
+          - HEAD
+          Compress: true
+          ForwardedValues: 
+            QueryString: true 
+            Cookies:
+              Forward: none 
+          TargetOriginId: KittensOrigin  
+          ViewerProtocolPolicy: allow-all 
+        DefaultRootObject: index.html
+        Enabled: true
+        HttpVersion: 'http2'
+        Origins: 
+        - DomainName: !Select [2, !Split ["/", !GetAtt KittensBucket.WebsiteURL]] 
+          Id: KittensOrigin
+          CustomOriginConfig: 
+            OriginProtocolPolicy: http-only 
+        PriceClass: PriceClass_All
+        ViewerCertificate:  
+          AcmCertificateArn: !Ref KittensCertificate
+          SslSupportMethod: sni-only 
+  LogicalID:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      Comment: "String"
+      HostedZoneId: "String"
+      HostedZoneName: "String"
+      RecordSets:
+        RecordSets
+
+  KittenDNSName: 
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: !Ref DomainName 
+      RecordSets: 
+        - Name: !Ref KittensDomainName
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2 
+            DNSName: !GetAtt KittensCloudfront.DomainName
+Outputs:
